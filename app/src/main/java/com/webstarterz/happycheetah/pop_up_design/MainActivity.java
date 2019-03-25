@@ -18,10 +18,10 @@ public class MainActivity extends AppCompatActivity {
     Button btnReset;
     TextView tvBrand, tvModel, tvYear, tvPrice;
 
-    String brandLable = "Brand";
-    String modelLable = "Model";
-    String priceLable = "Price";
-    String yearLable = "Year";
+    String brandLabel = "Brand";
+    String modelLabel = "Model";
+    String priceLabel = "Price";
+    String yearLabel = "Year";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
                 i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_BRAND);
                 i.putExtra(IE_DATA, tvBrand.getText());
-                i.putExtra(IE_TITLE, brandLable);
+                i.putExtra(IE_TITLE, brandLabel);
                 startActivityForResult(i, REQUEST_CODE_FOR_BRAND);
 
             }
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
                 i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_MODEL);
                 i.putExtra(IE_DATA, tvBrand.getText());
-                i.putExtra(IE_TITLE, modelLable);
+                i.putExtra(IE_TITLE, modelLabel);
                 startActivityForResult(i, REQUEST_CODE_FOR_MODEL);
 
             }
@@ -77,19 +77,19 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
                 i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_YEAR);
                 i.putExtra(IE_DATA, tvModel.getText());
-                i.putExtra(IE_TITLE, yearLable);
+                i.putExtra(IE_TITLE, yearLabel);
                 startActivityForResult(i, REQUEST_CODE_FOR_YEAR);
 
             }
         });
 
-        tvBrand.setText(brandLable);
-        tvModel.setText(modelLable);
-        tvYear.setText(yearLable);
+        tvBrand.setText(brandLabel);
+        tvModel.setText(modelLabel);
+        tvYear.setText(yearLabel);
 
-        tvPrice.setText(priceLable);
+        tvPrice.setText(priceLabel);
 
-        if (tvBrand.getText() == brandLable) {
+        if (tvBrand.getText() == brandLabel) {
             tvModel.setEnabled(false);
             tvYear.setEnabled(false);
             btnReset.setEnabled(false);
@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnReset() {
 
-        tvBrand.setText(brandLable);
-        tvModel.setText(modelLable);
-        tvYear.setText(yearLable);
-        tvPrice.setText(priceLable);
+        tvBrand.setText(brandLabel);
+        tvModel.setText(modelLabel);
+        tvYear.setText(yearLabel);
+        tvPrice.setText(priceLabel);
         tvModel.setEnabled(false);
         tvYear.setEnabled(false);
         btnReset.setEnabled(false);
@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     tvModel.setEnabled(true);
                     tvYear.setEnabled(false);
                     btnReset.setEnabled(true);
-                    if (tvModel.getText() != modelLable) {
-                        tvModel.setText(modelLable);
-                        tvYear.setText(yearLable);
-                        tvPrice.setText(priceLable);
+                    if (tvModel.getText() != modelLabel) {
+                        tvModel.setText(modelLabel);
+                        tvYear.setText(yearLabel);
+                        tvPrice.setText(priceLabel);
 
                     }
                 }
@@ -132,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!tvModel.getText().equals(data.getStringExtra("result"))) {
                     tvModel.setText(data.getStringExtra("result"));
                     tvYear.setEnabled(true);
-                    if (tvYear.getText() != yearLable) {
-                        tvYear.setText(yearLable);
-                        tvPrice.setText(priceLable);
+                    if (tvYear.getText() != yearLabel) {
+                        tvYear.setText(yearLabel);
+                        tvPrice.setText(priceLabel);
 
                     }
                 }
