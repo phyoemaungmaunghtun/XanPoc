@@ -18,29 +18,32 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.webstarterz.happycheetah.pop_up_design.Interfaces.ApiClient;
 import com.webstarterz.happycheetah.pop_up_design.Interfaces.ApiInterface;
+
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PopActivity extends AppCompatActivity{
+public class PopActivity extends AppCompatActivity {
 
     private List<Car> cars;
     private ApiInterface apiInterface;
     private CarAdapter carAdapter;
     Car car;
-    String table,data;
+    String data,title;
+    int requsetCode;
     ListView lstView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        lstView = (ListView)findViewById(R.id.modellist);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        lstView = (ListView) findViewById(R.id.modellist);
 
         setSupportActionBar(toolbar);
 
@@ -51,24 +54,24 @@ public class PopActivity extends AppCompatActivity{
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.7),(int)(height*.35));
+        getWindow().setLayout((int) (width * .7), (int) (height * .35));
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         params.x = 10;
         params.y = -10;
         getWindow().setAttributes(params);
         Bundle bundle1 = getIntent().getExtras();
-        table = bundle1.getString("table");
-        data = bundle1.getString("data");
-        getSupportActionBar().setTitle(table);
+        requsetCode = bundle1.getInt(MainActivity.REQUEST_CODE);
+        data = bundle1.getString(MainActivity.DATA);
+        title = bundle1.getString(MainActivity.TITLE);
+        getSupportActionBar().setTitle(title);
 
-        fetchCar("",table,data);
-
+        fetch_car("");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       return true;
+        return true;
     }
 
     @Override
@@ -84,57 +87,120 @@ public class PopActivity extends AppCompatActivity{
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                fetchCar(query,table,data);
+                fetch_car(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                fetchCar(newText,table,data);
+                fetch_car(newText);
                 return false;
             }
         });
         return true;
     }
 
-    public void fetchCar(String filter_key, final String table,final String data){
+    public void fetch_Brand(String filter_key, final String data) {
 
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
-        Call<List<Car>> call = apiInterface.getContact(filter_key,table,data);
+        Call<List<Car>> call = apiInterface.getBrand(filter_key, data);
 
         call.enqueue(new Callback<List<Car>>() {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
 
                 cars = response.body();
-                carAdapter = new CarAdapter(PopActivity.this, 0, cars);
-                lstView = (ListView) findViewById(R.id.modellist);
-                lstView.setAdapter(carAdapter);
-                lstView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                            long arg3) {
-                        Intent returnIntent = new Intent();
-                        car = cars.get(arg2);
-
-                        returnIntent.putExtra("price",""+ car.getPrice());
-                        returnIntent.putExtra("result",""+ car.getModel());
-                        PopActivity.this.setResult(RESULT_OK,returnIntent);
-                        PopActivity.this.finish();
-
-                    }
-
-                });
+                list_car();
             }
 
             @Override
             public void onFailure(Call<List<Car>> call, Throwable t) {
-                Toast.makeText(PopActivity.this, "Error\n"+data+"\n"+table, Toast.LENGTH_LONG).show();
+                Toast.makeText(PopActivity.this, "Error\n" + t.toString() + "\n", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    public void fetch_Model(String filter_key, final String data) {
 
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+
+        Call<List<Car>> call = apiInterface.getModel(filter_key, data);
+
+        call.enqueue(new Callback<List<Car>>() {
+            @Override
+            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+
+                cars = response.body();
+                list_car();
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                Toast.makeText(PopActivity.this, "Error\n" + t.toString() + "\n", Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
+    public void fetch_Year(String filter_key, final String data) {
+
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+
+        Call<List<Car>> call = apiInterface.getYear(filter_key, data);
+
+        call.enqueue(new Callback<List<Car>>() {
+            @Override
+            public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
+
+                cars = response.body();
+                list_car();
+            }
+
+            @Override
+            public void onFailure(Call<List<Car>> call, Throwable t) {
+                Toast.makeText(PopActivity.this, "Error\n" + t.toString() + "\n", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void fetch_car(String filter_key) {
+        switch (requsetCode) {
+            case MainActivity.REQUEST_CODE_FOR_BRAND:
+                fetch_Brand(filter_key, data);
+                break;
+            case MainActivity.REQUEST_CODE_FOR_MODEL:
+                fetch_Model(filter_key, data);
+                break;
+            case MainActivity.REQUEST_CODE_FOR_YEAR:
+                fetch_Year(filter_key, data);
+                break;
+            default:
+                return;
+
+        }
+    }
+
+    public void list_car() {
+        carAdapter = new CarAdapter(PopActivity.this, 0, cars);
+        lstView = (ListView) findViewById(R.id.modellist);
+        lstView.setAdapter(carAdapter);
+        lstView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                Intent returnIntent = new Intent();
+                car = cars.get(arg2);
+                switch (requsetCode) {
+                    case 3:
+                        returnIntent.putExtra("price", "" + car.getPrice());
+                        break;
+                }
+                returnIntent.putExtra("result", "" + car.getModel());
+                PopActivity.this.setResult(RESULT_OK, returnIntent);
+                PopActivity.this.finish();
+            }
+
+        });
+    }
+}

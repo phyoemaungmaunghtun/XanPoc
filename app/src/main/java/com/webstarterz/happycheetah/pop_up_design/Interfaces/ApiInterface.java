@@ -11,10 +11,21 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET("retroSearch.php")
-    Call<List<Car>> getContact(
+    @GET("getBrand.php")
+    Call<List<Car>> getBrand(
             @Query("filter_key") String filter_key,
-            @Query("table") String table,
+            @Query("data") String data
+    );
+
+    @GET("getModel.php")
+    Call<List<Car>> getModel(
+            @Query("filter_key") String filter_key,
+            @Query("data") String data
+    );
+
+    @GET("getYear.php")
+    Call<List<Car>> getYear(
+            @Query("filter_key") String filter_key,
             @Query("data") String data
     );
 

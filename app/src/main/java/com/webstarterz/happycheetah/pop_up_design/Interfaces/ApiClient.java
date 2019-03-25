@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://happycheetah.webstarterz.com/ACE_Project/retroSearch.php/";
+    public static final String BASE_URL = "http://happycheetah.webstarterz.com/ACE_Project/";
     public static Retrofit retrofit;
 
     public static Retrofit getApiClient(){

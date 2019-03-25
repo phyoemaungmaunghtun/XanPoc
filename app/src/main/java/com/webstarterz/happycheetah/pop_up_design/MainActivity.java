@@ -12,9 +12,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_FOR_BRAND = 1;
     public static final int REQUEST_CODE_FOR_MODEL = 2;
     public static final int REQUEST_CODE_FOR_YEAR = 3;
+    public static final String REQUEST_CODE = "requestCode";
+    public static final String DATA = "data";
+    public static final String TITLE = "Title";
     Button btn;
     TextView brand, model, year, price;
-    String br_p, mo_p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra("table", "Brand");
-                i.putExtra("data", brand.getText());
+                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_BRAND);
+                i.putExtra(DATA, brand.getText());
+                i.putExtra(TITLE, "Brand");
                 startActivityForResult(i, REQUEST_CODE_FOR_BRAND);
 
             }
@@ -51,8 +54,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra("table", "Model");
-                i.putExtra("data", br_p);
+                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_MODEL);
+                i.putExtra(DATA, brand.getText());
+                i.putExtra(TITLE, "Model");
                 startActivityForResult(i, REQUEST_CODE_FOR_MODEL);
 
             }
@@ -63,8 +67,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra("table", "Year");
-                i.putExtra("data", mo_p);
+                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_YEAR);
+                i.putExtra(DATA, model.getText());
+                i.putExtra(TITLE, "Year");
                 startActivityForResult(i, REQUEST_CODE_FOR_YEAR);
 
             }
@@ -80,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             year.setEnabled(false);
             btn.setEnabled(false);
         }
-
     }
 
     public void btnReset() {
@@ -98,12 +102,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == REQUEST_CODE_FOR_BRAND) {
-
             if (resultCode == RESULT_OK) {
 
                 if (!brand.getText().equals(data.getStringExtra("result"))) {
-
-                    br_p = data.getStringExtra("price");
                     brand.setText(data.getStringExtra("result"));
                     model.setEnabled(true);
                     year.setEnabled(false);
@@ -120,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 if (!model.getText().equals(data.getStringExtra("result"))) {
-                    mo_p = data.getStringExtra("price");
                     model.setText(data.getStringExtra("result"));
                     year.setEnabled(true);
                     if (year.getText() != "Year") {
@@ -141,6 +141,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
