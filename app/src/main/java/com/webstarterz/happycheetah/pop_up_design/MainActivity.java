@@ -12,90 +12,99 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_FOR_BRAND = 1;
     public static final int REQUEST_CODE_FOR_MODEL = 2;
     public static final int REQUEST_CODE_FOR_YEAR = 3;
-    public static final String REQUEST_CODE = "requestCode";
-    public static final String DATA = "data";
-    public static final String TITLE = "Title";
-    Button btn;
-    TextView brand, model, year, price;
+    public static final String IE_REQUEST_CODE = "requestCode";
+    public static final String IE_DATA = "data";
+    public static final String IE_TITLE = "Title";
+    Button btnReset;
+    TextView tvBrand, tvModel, tvYear, tvPrice;
+
+    String brandLable = "Brand";
+    String modelLable = "Model";
+    String priceLable = "Price";
+    String yearLable = "Year";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Context context = this;
-        brand = (TextView) findViewById(R.id.brand);
-        model = (TextView) findViewById(R.id.model);
-        year = (TextView) findViewById(R.id.year);
-        price = (TextView) findViewById(R.id.price);
-        btn = (Button) findViewById(R.id.button);
+        tvBrand = (TextView) findViewById(R.id.brand);
+        tvModel = (TextView) findViewById(R.id.model);
+        tvYear = (TextView) findViewById(R.id.year);
+        tvPrice = (TextView) findViewById(R.id.price);
+        btnReset = (Button) findViewById(R.id.button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btnReset();
             }
         });
 
-        brand.setOnClickListener(new View.OnClickListener() {
+
+        tvBrand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_BRAND);
-                i.putExtra(DATA, brand.getText());
-                i.putExtra(TITLE, "Brand");
+                i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_BRAND);
+                i.putExtra(IE_DATA, tvBrand.getText());
+                i.putExtra(IE_TITLE, brandLable);
                 startActivityForResult(i, REQUEST_CODE_FOR_BRAND);
 
             }
         });
 
-        model.setOnClickListener(new View.OnClickListener() {
+
+        tvModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_MODEL);
-                i.putExtra(DATA, brand.getText());
-                i.putExtra(TITLE, "Model");
+                i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_MODEL);
+                i.putExtra(IE_DATA, tvBrand.getText());
+                i.putExtra(IE_TITLE, modelLable);
                 startActivityForResult(i, REQUEST_CODE_FOR_MODEL);
 
             }
         });
 
-        year.setOnClickListener(new View.OnClickListener() {
+
+        tvYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent i = new Intent(getApplicationContext(), PopActivity.class);
-                i.putExtra(REQUEST_CODE, REQUEST_CODE_FOR_YEAR);
-                i.putExtra(DATA, model.getText());
-                i.putExtra(TITLE, "Year");
+                i.putExtra(IE_REQUEST_CODE, REQUEST_CODE_FOR_YEAR);
+                i.putExtra(IE_DATA, tvModel.getText());
+                i.putExtra(IE_TITLE, yearLable);
                 startActivityForResult(i, REQUEST_CODE_FOR_YEAR);
 
             }
         });
 
-        brand.setText("Brand");
-        model.setText("Model");
-        year.setText("Year");
-        price.setText("Price");
+        tvBrand.setText(brandLable);
+        tvModel.setText(modelLable);
+        tvYear.setText(yearLable);
 
-        if (brand.getText() == "Brand") {
-            model.setEnabled(false);
-            year.setEnabled(false);
-            btn.setEnabled(false);
+        tvPrice.setText(priceLable);
+
+        if (tvBrand.getText() == brandLable) {
+            tvModel.setEnabled(false);
+            tvYear.setEnabled(false);
+            btnReset.setEnabled(false);
         }
     }
 
     public void btnReset() {
 
-        brand.setText("Brand");
-        model.setText("Model");
-        year.setText("Year");
-        price.setText("Price");
-        model.setEnabled(false);
-        year.setEnabled(false);
-        btn.setEnabled(false);
+        tvBrand.setText(brandLable);
+        tvModel.setText(modelLable);
+        tvYear.setText(yearLable);
+        tvPrice.setText(priceLable);
+        tvModel.setEnabled(false);
+        tvYear.setEnabled(false);
+        btnReset.setEnabled(false);
 
     }
 
@@ -104,15 +113,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_FOR_BRAND) {
             if (resultCode == RESULT_OK) {
 
-                if (!brand.getText().equals(data.getStringExtra("result"))) {
-                    brand.setText(data.getStringExtra("result"));
-                    model.setEnabled(true);
-                    year.setEnabled(false);
-                    btn.setEnabled(true);
-                    if (model.getText() != "Model") {
-                        model.setText("Model");
-                        year.setText("Year");
-                        price.setText("Price");
+                if (!tvBrand.getText().equals(data.getStringExtra("result"))) {
+                    tvBrand.setText(data.getStringExtra("result"));
+                    tvModel.setEnabled(true);
+                    tvYear.setEnabled(false);
+                    btnReset.setEnabled(true);
+                    if (tvModel.getText() != modelLable) {
+                        tvModel.setText(modelLable);
+                        tvYear.setText(yearLable);
+                        tvPrice.setText(priceLable);
 
                     }
                 }
@@ -120,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == REQUEST_CODE_FOR_MODEL) {
             if (resultCode == RESULT_OK) {
 
-                if (!model.getText().equals(data.getStringExtra("result"))) {
-                    model.setText(data.getStringExtra("result"));
-                    year.setEnabled(true);
-                    if (year.getText() != "Year") {
-                        year.setText("Year");
-                        price.setText("Price");
+                if (!tvModel.getText().equals(data.getStringExtra("result"))) {
+                    tvModel.setText(data.getStringExtra("result"));
+                    tvYear.setEnabled(true);
+                    if (tvYear.getText() != yearLable) {
+                        tvYear.setText(yearLable);
+                        tvPrice.setText(priceLable);
 
                     }
                 }
@@ -133,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == REQUEST_CODE_FOR_YEAR) {
             if (resultCode == RESULT_OK) {
 
-                if (!year.getText().equals(data.getStringExtra("result"))) {
-                    year.setText(data.getStringExtra("result"));
-                    price.setText("$" + data.getStringExtra("price"));
+                if (!tvYear.getText().equals(data.getStringExtra("result"))) {
+                    tvYear.setText(data.getStringExtra("result"));
+                    tvPrice.setText("$" + data.getStringExtra("Price"));
 
                 }
             }

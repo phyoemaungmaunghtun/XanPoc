@@ -61,9 +61,9 @@ public class PopActivity extends AppCompatActivity {
         params.y = -10;
         getWindow().setAttributes(params);
         Bundle bundle1 = getIntent().getExtras();
-        requsetCode = bundle1.getInt(MainActivity.REQUEST_CODE);
-        data = bundle1.getString(MainActivity.DATA);
-        title = bundle1.getString(MainActivity.TITLE);
+        requsetCode = bundle1.getInt(MainActivity.IE_REQUEST_CODE);
+        data = bundle1.getString(MainActivity.IE_DATA);
+        title = bundle1.getString(MainActivity.IE_TITLE);
         getSupportActionBar().setTitle(title);
 
         fetch_car("");
@@ -193,7 +193,7 @@ public class PopActivity extends AppCompatActivity {
                 car = cars.get(arg2);
                 switch (requsetCode) {
                     case 3:
-                        returnIntent.putExtra("price", "" + car.getPrice());
+                        returnIntent.putExtra("Price", "" + car.getPrice());
                         break;
                 }
                 returnIntent.putExtra("result", "" + car.getModel());
