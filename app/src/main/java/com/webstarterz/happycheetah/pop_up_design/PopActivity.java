@@ -30,10 +30,9 @@ public class PopActivity extends AppCompatActivity{
 
     private List<Car> cars;
     private ApiInterface apiInterface;
-    private CarAdapter personAdapter;
+    private CarAdapter carAdapter;
     Car car;
-    String type;
-    String data;
+    String table,data;
     ListView lstView;
 
     @Override
@@ -59,11 +58,11 @@ public class PopActivity extends AppCompatActivity{
         params.y = -10;
         getWindow().setAttributes(params);
         Bundle bundle1 = getIntent().getExtras();
-        type = bundle1.getString("type");
+        table = bundle1.getString("table");
         data = bundle1.getString("data");
-        getSupportActionBar().setTitle(type);
+        getSupportActionBar().setTitle(table);
 
-        fetchCar("users", "",type,data);
+        fetchCar("",table,data);
 
     }
 
@@ -85,31 +84,33 @@ public class PopActivity extends AppCompatActivity{
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                fetchCar("users", query,type,data);
+                fetchCar(query,table,data);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                fetchCar("users", newText,type,data);
+                fetchCar(newText,table,data);
                 return false;
             }
         });
         return true;
     }
 
-    public void fetchCar(String user, String key, final String table, String data){
+    public void fetchCar(String filter_key, final String table,final String data){
 
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<Car>> call = apiInterface.getContact(user, key,table,data);
+
+        Call<List<Car>> call = apiInterface.getContact(filter_key,table,data);
+
         call.enqueue(new Callback<List<Car>>() {
             @Override
             public void onResponse(Call<List<Car>> call, Response<List<Car>> response) {
 
                 cars = response.body();
-                personAdapter = new CarAdapter(PopActivity.this, 0, cars);
+                carAdapter = new CarAdapter(PopActivity.this, 0, cars);
                 lstView = (ListView) findViewById(R.id.modellist);
-                lstView.setAdapter(personAdapter);
+                lstView.setAdapter(carAdapter);
                 lstView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
@@ -117,12 +118,8 @@ public class PopActivity extends AppCompatActivity{
                                             long arg3) {
                         Intent returnIntent = new Intent();
                         car = cars.get(arg2);
-                        switch(table) {
-                            case "Year":
-                                returnIntent.putExtra("price",""+ car.getPrice());
-                                break;
-                        }
 
+                        returnIntent.putExtra("price",""+ car.getPrice());
                         returnIntent.putExtra("result",""+ car.getModel());
                         PopActivity.this.setResult(RESULT_OK,returnIntent);
                         PopActivity.this.finish();
@@ -134,7 +131,7 @@ public class PopActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(Call<List<Car>> call, Throwable t) {
-                Toast.makeText(PopActivity.this, "Error\n"+t.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(PopActivity.this, "Error\n"+data+"\n"+table, Toast.LENGTH_LONG).show();
             }
         });
     }

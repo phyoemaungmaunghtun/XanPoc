@@ -12,12 +12,12 @@ import java.util.List;
 
 public class CarAdapter extends ArrayAdapter<Car> {
 
-    List<Car>  personList;
+    List<Car>  carList;
     private Context mContext;
 
     public CarAdapter(Context context, int resource, List objects) {
         super(context, resource, objects);
-        this.personList = objects;
+        this.carList = objects;
         this.mContext = context;
     }
 
@@ -43,6 +43,6 @@ public class CarAdapter extends ArrayAdapter<Car> {
     }
 
     public Car getItem(int position) {
-        return personList.get(position);
+        return carList.get(position);
     }
 }

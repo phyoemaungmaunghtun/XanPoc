@@ -2,26 +2,19 @@ package com.webstarterz.happycheetah.pop_up_design;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_FOR_BRAND = 1;
+    public static final int REQUEST_CODE_FOR_MODEL = 2;
+    public static final int REQUEST_CODE_FOR_YEAR = 3;
     Button btn;
-    TextView brand,model,year,price;
-    public String br = "Brand";
-    public String mo = "Model";
-    public String ye = "Year";
-    public String pr = "Price";
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-
-    }
+    TextView brand, model, year, price;
+    String br_p, mo_p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
         price = (TextView) findViewById(R.id.price);
         btn = (Button) findViewById(R.id.button);
 
-        if(br == "Brand"){
-            model.setEnabled(false);
-            year.setEnabled(false);
-            btn.setEnabled(false);
-        }
-
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(getApplicationContext(),PopActivity.class);
-                i.putExtra("type","Brand");
-                i.putExtra("data",br);
-                startActivityForResult(i, 1);
+                Intent i = new Intent(getApplicationContext(), PopActivity.class);
+                i.putExtra("table", "Brand");
+                i.putExtra("data", brand.getText());
+                startActivityForResult(i, REQUEST_CODE_FOR_BRAND);
 
             }
         });
@@ -63,10 +50,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(getApplicationContext(),PopActivity.class);
-                i.putExtra("type","Model");
-                i.putExtra("data",br);
-                startActivityForResult(i, 2);
+                Intent i = new Intent(getApplicationContext(), PopActivity.class);
+                i.putExtra("table", "Model");
+                i.putExtra("data", br_p);
+                startActivityForResult(i, REQUEST_CODE_FOR_MODEL);
 
             }
         });
@@ -75,31 +62,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(getApplicationContext(),PopActivity.class);
-                i.putExtra("type","Year");
-                i.putExtra("data",mo);
-                startActivityForResult(i, 3);
+                Intent i = new Intent(getApplicationContext(), PopActivity.class);
+                i.putExtra("table", "Year");
+                i.putExtra("data", mo_p);
+                startActivityForResult(i, REQUEST_CODE_FOR_YEAR);
 
             }
         });
 
-        brand.setText(br);
-        model.setText(mo);
-        year.setText(ye);
-        price.setText(pr);
+        brand.setText("Brand");
+        model.setText("Model");
+        year.setText("Year");
+        price.setText("Price");
+
+        if (brand.getText() == "Brand") {
+            model.setEnabled(false);
+            year.setEnabled(false);
+            btn.setEnabled(false);
+        }
 
     }
 
-    public void btnReset(){
+    public void btnReset() {
 
-        br = "Brand";
-        mo = "Model";
-        ye = "Year";
-        pr = "Price";
-        brand.setText(br);
-        model.setText(mo);
-        year.setText(ye);
-        price.setText(pr);
+        brand.setText("Brand");
+        model.setText("Model");
+        year.setText("Year");
+        price.setText("Price");
         model.setEnabled(false);
         year.setEnabled(false);
         btn.setEnabled(false);
@@ -108,73 +97,47 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
+        if (requestCode == REQUEST_CODE_FOR_BRAND) {
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
 
-                if(br.equals( data.getStringExtra("result"))){
+                if (!brand.getText().equals(data.getStringExtra("result"))) {
 
-                }else{
-
-                    br = data.getStringExtra("result");
-                    brand.setText(br);
+                    br_p = data.getStringExtra("price");
+                    brand.setText(data.getStringExtra("result"));
                     model.setEnabled(true);
                     year.setEnabled(false);
                     btn.setEnabled(true);
-                    if(mo != "model"){
-                        mo = "Model";
-                        ye = "Year";
-                        pr = "Price";
-                        model.setText(mo);
-                        year.setText(ye);
-                        price.setText(pr);
+                    if (model.getText() != "Model") {
+                        model.setText("Model");
+                        year.setText("Year");
+                        price.setText("Price");
+
                     }
                 }
-
             }
-            if (resultCode == RESULT_CANCELED) {
-                //Do nothing?
-            }
-        }else if (requestCode == 2){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == REQUEST_CODE_FOR_MODEL) {
+            if (resultCode == RESULT_OK) {
 
-                if(mo.equals(data.getStringExtra("result"))){
-
-                }else{
-
-                    mo = data.getStringExtra("result");
-                    model.setText(mo);
+                if (!model.getText().equals(data.getStringExtra("result"))) {
+                    mo_p = data.getStringExtra("price");
+                    model.setText(data.getStringExtra("result"));
                     year.setEnabled(true);
-                    if(ye != "Year"){
-                        ye = "Year";
-                        pr = "Price";
-                        year.setText(ye);
-                        price.setText(pr);
+                    if (year.getText() != "Year") {
+                        year.setText("Year");
+                        price.setText("Price");
+
                     }
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_FOR_YEAR) {
+            if (resultCode == RESULT_OK) {
+
+                if (!year.getText().equals(data.getStringExtra("result"))) {
+                    year.setText(data.getStringExtra("result"));
+                    price.setText("$" + data.getStringExtra("price"));
 
                 }
-
-            }
-            if (resultCode == RESULT_CANCELED) {
-                //Do nothing?
-            }
-        }else if (requestCode == 3){
-            if(resultCode == RESULT_OK){
-
-                if(ye.equals(data.getStringExtra("result"))){
-
-                }else{
-
-                    ye = data.getStringExtra("result");
-                    pr = data.getStringExtra("price");
-                    year.setText(ye);
-                    price.setText("$"+pr);
-
-                }
-
-            }
-            if (resultCode == RESULT_CANCELED) {
-                //Do nothing?
             }
         }
     }

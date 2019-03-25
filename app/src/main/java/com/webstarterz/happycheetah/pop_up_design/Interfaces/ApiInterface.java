@@ -13,9 +13,10 @@ public interface ApiInterface {
 
     @GET("retroSearch.php")
     Call<List<Car>> getContact(
-            @Query("item_type") String item_type,
-            @Query("key") String keyword,
+            @Query("filter_key") String filter_key,
             @Query("table") String table,
             @Query("data") String data
     );
+
+
 }
